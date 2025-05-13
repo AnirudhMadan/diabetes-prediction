@@ -1,0 +1,7 @@
+venv/Lib/site-packages/tensorflow/python/_pywrap_tensorflow_internal.pyd
+
+venv/
+*.pyc
+__pycache__/
+*.pyd
+*.dll

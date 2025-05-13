@@ -1,0 +1,25 @@
+# Python specific
+__pycache__/
+*.py[cod]
+*.pyo
+.python-version
+
+# Virtual environment
+venv/
+.env/
+.venv/
+
+# IDE/editor specific
+.vscode/
+.idea/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# MacOS and Windows specific
+.DS_Store
+Thumbs.db
+
+# Large files (TensorFlow, etc.)
+venv/Lib/site-packages/tensorflow/python/_pywrap_tensorflow_internal.pyd
+venv/Lib/site-packages/clang/native/libclang.dll

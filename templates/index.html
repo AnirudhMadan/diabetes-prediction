@@ -1,0 +1,114 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diabetes Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Diabetes Prediction</h1>
+    <div class="container">
+        <div class="side-panel">
+            <h2>Typical Medians</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Non-Diabetic</th>
+                        <th>Diabetic</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in median_table %}
+                        <tr>
+                            <td>{{ row['Feature'] }}</td>
+                            <td>{{ row['Non-Diabetic (0)'] }}</td>
+                            <td>{{ row['Diabetic (1)'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <form method="POST" style="margin-top: 10px;">
+                <input type="hidden" name="model" value="Accuracy Stats">
+                <button type="submit">Show Accuracy Stats</button>
+            </form>
+        </div>
+
+        <div class="form-panel">
+            <form method="POST" id="prediction-form">
+                <div class="form-grid">
+                    {% set fields = {
+                        'Pregnancies': {'step': '1', 'min': '0'},
+                        'Glucose': {'step': '1', 'min': '0'},
+                        'BloodPressure': {'step': '1', 'min': '0'},
+                        'SkinThickness': {'step': '1', 'min': '0'},
+                        'Insulin': {'step': '1', 'min': '0'},
+                        'BMI': {'step': '0.1', 'min': '0'},
+                        'DiabetesPedigreeFunction': {'step': '0.001', 'min': '0', 'max': '1'},
+                        'Age': {'step': '1', 'min': '0'}
+                    } %}
+
+                    {% for field, attrs in fields.items() %}
+                        <div class="input-group">
+                            <label for="{{ field }}">{{ field }}:</label>
+                            <input type="number" name="{{ field }}"
+                                value="{{ request.form.get(field, '') }}"
+                                step="{{ attrs.step }}"
+                                min="{{ attrs.min }}"
+                                {% if attrs.max %} max="{{ attrs.max }}" {% endif %}
+                                required>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <label for="model">Select Model:</label>
+                <select name="model">
+                    {% for model in models %}
+                        <option value="{{ model }}" {% if model == selected_model %}selected{% endif %}>{{ model }}</option>
+                    {% endfor %}
+                </select>
+
+                <div class="buttons">
+                    <button type="submit" name="action" value="predict">Predict</button>
+                    <button type="submit" name="action" value="dl_predict">DL Predict</button>
+                    <button type="submit" name="action" value="qml_predict">QML Predict</button> 
+                    <button type="button" onclick="clearForm()">Clear</button>
+                </div>
+            </form>
+
+            {% if prediction %}
+                <div class="result">Result: {{ prediction }}</div>
+            {% endif %}
+
+            {% if model_accuracy %}
+                <div class="result">Model Accuracy: {{ model_accuracy }}</div>
+            {% endif %}
+
+            {% if accuracy_plot %}
+                <img src="{{ accuracy_plot }}" alt="Accuracy Chart">
+            {% endif %}
+        </div>
+    </div>
+
+    <a href="http://localhost:8501/" style="text-decoration: none;">
+        <button style="background-color: #f44336; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+          Logout
+        </button>
+      </a>
+      
+
+    <script>
+        function clearForm() {
+            const form = document.getElementById('prediction-form');
+            form.reset();
+            const inputs = form.querySelectorAll('input');
+            inputs.forEach(input => input.value = '');
+            const modelSelect = form.querySelector('select[name="model"]');
+            if (modelSelect) {
+                modelSelect.selectedIndex = 0;
+            }
+        }
+    </script>
+</body>
+</html>

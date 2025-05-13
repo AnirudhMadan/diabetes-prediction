@@ -3,6 +3,7 @@ import secrets
 from auth import login_register_ui, is_authenticated, logout
 from database import create_user_table
 import webbrowser
+import os
 
 TOKEN_FILE = "auth_token.txt"
 

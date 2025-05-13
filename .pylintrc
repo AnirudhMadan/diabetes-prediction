@@ -1,0 +1,15 @@
+### Testing and Linting Instructions
+
+1. **Run Unit Tests:**
+   - Ensure the container is running: `docker-compose up --build`
+   - Access the container: `docker-compose exec app /bin/sh`
+   - Run all tests: `python -m unittest discover -s . -p "test_*.py"`
+
+2. **Run Pylint:**
+   - Ensure the container is running and access it as above.
+   - Run Pylint for a specific file: `pylint app.py`
+   - Run Pylint for all project files: `pylint *.py`
+
+3. **Check Coverage (Optional):**
+   - Install pytest-cov: `pip install pytest-cov`
+   - Run coverage check: `pytest --cov=. --cov-report=term-missing`
